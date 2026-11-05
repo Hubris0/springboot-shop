@@ -31,44 +31,43 @@
         <maven.checkstyle.plugin.configLocation>checkstyle.xml</maven.checkstyle.plugin.configLocation>
     </properties>
     <dependencies>
+        <!-- Podstawowy starter Spring Boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.48</version>
-            <scope>provided</scope>
-        </dependency>
+
+        <!-- Starter dla JPA i Hibernate (Sam dostarczy odpowiednie wersje hibernate-core i spring-orm!) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
+        <!-- Jeden, poprawny sterownik do bazy MySQL (Wersją zarządza Spring Boot - brak tagu <version>) -->
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>6.2.7.Final</version>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
         </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
-            <version>6.1.1</version>
-        </dependency>
+
+        <!-- Baza danych H2 używana w testach -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Lombok do generowania getterów/setterów (Wersją zarządza Spring Boot - brak tagu <version>) -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Starter do testów automatycznych -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
