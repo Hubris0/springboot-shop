@@ -2,7 +2,7 @@ package mate.academy;
 
 import java.math.BigDecimal;
 import mate.academy.model.Book;
-import mate.academy.repository.BookRepository;
+import mate.academy.service.BookService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +16,7 @@ public class SpringbootShopApplication {
     }
 
     @Bean
-    public CommandLineRunner demo(BookRepository bookRepository) {
+    public CommandLineRunner demo(BookService bookService) {
         return args -> {
             System.out.println("--- Startowanie procesu dodawania danych testowych ---");
 
@@ -27,12 +27,12 @@ public class SpringbootShopApplication {
             harryPotter.setPrice(new BigDecimal("39.99"));
             harryPotter.setDescription("Fantastyczna powieść o młodym czarodzieju.");
 
-            bookRepository.addBook(harryPotter);
+            bookService.save(harryPotter);
 
             System.out.println("--- Książka została pomyślnie dodana do bazy danych! ---");
 
             System.out.println("--- Znaleziono następujące książki: "
-                    + bookRepository.findAll() + "\n ---");
+                    + bookService.findAll() + "\n ---");
         };
     }
 }

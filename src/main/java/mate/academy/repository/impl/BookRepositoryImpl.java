@@ -20,30 +20,28 @@ public class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
-    public Book addBook(Book book) {
+    public Book save(Book book) {
         Transaction transaction = null;
-        Session session = null;
-        try {
-            session = sessionFactory.openSession();
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.persist(book);
             transaction.commit();
             return book;
         } catch (Exception e) {
-            if (transaction != null) {
+            if (transaction != null
+                    && transaction.isActive()) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Can't insert book " + book, e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
+            throw new RuntimeException("Can't save book", e);
         }
     }
 
     @Override
     public List<Book> findAll() {
-        Session session = sessionFactory.openSession();
-        return session.createQuery("select b from Book b", Book.class).getResultList();
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery(
+                            "select b from Book b", Book.class)
+                    .getResultList();
+        }
     }
 }

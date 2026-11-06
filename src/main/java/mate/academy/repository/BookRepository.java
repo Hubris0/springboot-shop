@@ -4,7 +4,7 @@ import java.util.List;
 import mate.academy.model.Book;
 
 public interface BookRepository {
-    Book addBook(Book book);
+    Book save(Book book);
 
     List<Book> findAll();
 }
