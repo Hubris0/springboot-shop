@@ -1,33 +1,31 @@
 package mate.academy.repository.impl;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import java.util.List;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 import mate.academy.model.Book;
 import mate.academy.repository.BookRepository;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+@RequiredArgsConstructor
 @Repository
 public class BookRepositoryImpl implements BookRepository {
 
-    private final SessionFactory sessionFactory;
-
-    @Autowired
-    public BookRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    private final EntityManagerFactory entityManagerFactory;
 
     @Override
     public Book save(Book book) {
-        Transaction transaction = null;
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-            session.persist(book);
+        EntityTransaction transaction = null;
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            transaction = entityManager.getTransaction();
+            transaction.begin();
+            entityManager.persist(book);
             transaction.commit();
             return book;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             if (transaction != null
                     && transaction.isActive()) {
                 transaction.rollback();
@@ -38,10 +36,18 @@ public class BookRepositoryImpl implements BookRepository {
 
     @Override
     public List<Book> findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            return session.createQuery(
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            return entityManager.createQuery(
                             "select b from Book b", Book.class)
                     .getResultList();
+        }
+    }
+
+    @Override
+    public Optional<Book> findById(Long id) {
+        try (EntityManager entityManager = entityManagerFactory.createEntityManager()) {
+            Book book = entityManager.find(Book.class, id);
+            return book != null ? Optional.of(book) : Optional.empty();
         }
     }
 }
