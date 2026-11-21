@@ -7,8 +7,8 @@ create table books (
                        author varchar(255) not null,
                        cover_image varchar(255),
                        description varchar(255),
-                       isbn varchar(255) not null,
+                       isbn varchar(255) unique not null,
                        title varchar(255) not null,
                        primary key (id)
-)
+);
 -- rollback DROP TABLE books;
