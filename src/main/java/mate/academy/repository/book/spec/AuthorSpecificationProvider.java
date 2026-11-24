@@ -9,19 +9,21 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuthorSpecificationProvider implements SpecificationProvider<Book> {
+    public static final String KEY = "author";
 
     @Override
     public String getKey() {
-        return "author";
+        return KEY;
     }
 
     @Override
     public Specification<Book> getSpecification(String[] params) {
+        String key = "author";
         return (root, query, criteriaBuilder)
                 -> {
             Predicate[] predicates = Arrays.stream(params)
                     .map(param -> criteriaBuilder.like(
-                            criteriaBuilder.lower(root.get("author")),
+                            criteriaBuilder.lower(root.get(KEY)),
                             "%" + param.toLowerCase() + "%"
                     ))
                     .toArray(Predicate[]::new);

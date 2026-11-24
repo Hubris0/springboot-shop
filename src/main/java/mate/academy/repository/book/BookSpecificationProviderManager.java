@@ -16,6 +16,9 @@ public class BookSpecificationProviderManager implements SpecificationProviderMa
 
     @Override
     public SpecificationProvider<Book> getSpecificationProvider(String key) {
+        if (key == null) {
+            throw new IllegalArgumentException("Specification key cannot be null");
+        }
         return bookSpecificationProviders.stream()
                 .filter(b -> b.getKey().equals(key))
                 .findFirst()
