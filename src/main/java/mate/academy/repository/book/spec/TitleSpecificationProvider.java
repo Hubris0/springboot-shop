@@ -1,5 +1,6 @@
 package mate.academy.repository.book.spec;
 
+import jakarta.persistence.criteria.Predicate;
 import java.util.Arrays;
 import mate.academy.model.Book;
 import mate.academy.repository.SpecificationProvider;
@@ -17,6 +18,14 @@ public class TitleSpecificationProvider implements SpecificationProvider<Book> {
     @Override
     public Specification<Book> getSpecification(String[] params) {
         return (root, query, criteriaBuilder)
-                -> root.get("title").in(Arrays.stream(params).toArray());
+                -> {
+            Predicate[] predicates = Arrays.stream(params)
+                    .map(param -> criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("title")),
+                            "%" + param.toLowerCase() + "%"
+                    ))
+                    .toArray(Predicate[]::new);
+            return criteriaBuilder.or(predicates);
+        };
     }
 }
